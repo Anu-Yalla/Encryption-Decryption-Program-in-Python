@@ -1,0 +1,76 @@
+from cipher import main
+import os
+
+def test_cipher_encryption():
+    """This function tests if the program encrypts properly."""
+    # Write input file to encrypt
+    file = open("file_to_encrypt.txt", "w")  # Open the file for writing
+    file.write("The best!\nA")  # Write the text
+    file.close()  # Close the file to save changes
+
+    # Write key file with the encryption key
+    key_file = open("key.txt", "w")
+    key_file.write("JIOCANTRQWUKVEGXPDFZBMHLSY")  # Encryption key used for decryption
+    key_file.close()
+    
+    # Write commands.txt for encryption
+    commands = open("commands.txt", "w")
+    commands.write("key.txt\n")  # Key file
+    commands.write("encrypt\n")  # Task is to encrypt
+    commands.write("file_to_encrypt.txt\n")  # Input file name
+    commands.write("encrypted_test_file.txt\n")  # Output file name
+    commands.close()
+    
+    # Call main after setting up the text files.
+    main()
+
+    #
+    encrypted_file = open("encrypted_test_file.txt", "r")
+    encrypted_text = encrypted_file.read()
+    encrypted_file.close()
+
+    expected_encrypted_text = "Zra iafz!\nJ"  # Expected encrypted text the "\n" is a special character does not change.
+    assert encrypted_text == expected_encrypted_text
+    
+    # Clean up
+    os.remove("file_to_encrypt.txt")
+    os.remove("commands.txt")
+    os.remove("key.txt")
+    os.remove("encrypted_test_file.txt")
+
+
+def test_cipher_decryption():
+    """This function tests if the program encrypts properly."""
+    file = open("file_to_decrypt.txt", "w")
+    file.write("Zra iafz!") 
+    file.close()
+
+    # Write key file with the encryption key
+    key_file = open("key.txt", "w")
+    key_file.write("JIOCANTRQWUKVEGXPDFZBMHLSY")
+    key_file.close()
+
+    # Write commands.txt to specify decryption task
+    commands = open("commands.txt", "w")
+    commands.write("key.txt\n")  # Key file
+    commands.write("decrypt\n")  # Task is to decrypt
+    commands.write("file_to_decrypt.txt\n")  # Input file name
+    commands.write("decrypted_test_file.txt\n")  # Output file name
+    commands.close()
+
+    # Call main() to decrypt
+    main()
+
+    # Now read the decrypted file and check the result
+    decrypted_file = open("decrypted_test_file.txt", "r")
+    decrypted_text = decrypted_file.read()
+    decrypted_file.close()
+
+    expected_decrypted_text = "The best!" 
+    assert decrypted_text == expected_decrypted_text
+
+    # Clean up the created files
+    os.remove("file_to_decrypt.txt")
+    os.remove("commands.txt")
+    os.remove("decrypted_test_file.txt")
+    os.remove("key.txt") 
